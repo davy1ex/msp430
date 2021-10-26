@@ -143,6 +143,9 @@ void main(void)
         /* Normal operation */
         LPM0;
         LCDdec(xxx, 3);
+
+        if (UCB0RXBUF > 0x64) AU_ON;
+        else (AU_OFF);
     }
 }
 
@@ -156,9 +159,7 @@ __interrupt void USCIAB0TX_ISR(void)
 #pragma vector = USCIAB0RX_VECTOR
 __interrupt void USCIAB0RX_ISR(void)
 {
-  if (touch_stat) {    
-    AU_ON;
-  } else AU_OFF;
+  
     UCB0STAT &= ~(UCSTPIFG | UCSTTIFG);
     LPM0_EXIT;
 }
