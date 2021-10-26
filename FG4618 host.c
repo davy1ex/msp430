@@ -8,6 +8,8 @@
 
 #include <stdint.h>
 #include <msp430xG46x.h>
+#include "LCD_defs.h"
+
 
 #define FALSE 0
 #define TRUE (!FALSE)
@@ -64,6 +66,9 @@ const uint8_t lcd_digit_table[18] =
     CHAR_MINUS,
     CHAR_SPACE
 };
+
+static int touch_stat = 0;
+
 
 void init_lcd(void)
 {
@@ -151,6 +156,9 @@ __interrupt void USCIAB0TX_ISR(void)
 #pragma vector = USCIAB0RX_VECTOR
 __interrupt void USCIAB0RX_ISR(void)
 {
+  if (touch_stat) {    
+    AU_ON;
+  } else AU_OFF;
     UCB0STAT &= ~(UCSTPIFG | UCSTTIFG);
     LPM0_EXIT;
 }
